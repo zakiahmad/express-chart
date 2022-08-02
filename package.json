@@ -1,5 +1,5 @@
 {
-    name: "RealtimeChart",
+    name: "express-chart",
     main: "app.js",
     dependencies: {
     express: "latest",
