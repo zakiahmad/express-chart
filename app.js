@@ -4,7 +4,15 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var app      = express();
 var server   = require('http').Server(app);
-var io       = require('socket.io')(server);
+var io       = require('socket.io')(server,{
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        transports: ['websocket', 'polling'],
+        credentials: true
+    },
+    allowEIO3: true
+});
 
 // Config
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,7 +25,7 @@ app.use(function(req,res,next){
 app.use(express.static(__dirname + '/public'));
 
 // Connect to DB
-var urldb = "mongodb://127.0.0.1:27017/realtime_asascharts";
+var urldb = "mongodb://127.0.0.1:27017/realtime_chart";
 mongoose.connect(urldb, function(err, db){
 	if(err) throw err;
 	console.log("dataabase konek");
@@ -89,6 +97,7 @@ io.on('connection', function (socket) {
 		}
 	);
 });
+
 
 // Start
 server.listen(3000);
