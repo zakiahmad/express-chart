@@ -17,7 +17,7 @@ app.use(function(req,res,next){
 app.use(express.static(__dirname + '/public'));
 
 // Connect to DB
-mongoose.connect("mongodb://127.0.0.1:27017/realtime_chart");
+mongoose.connect("mongodb://127.0.0.1:27017/realtime_asascharts");
 
 var schema = mongoose.Schema({name: String});
 var Vote = mongoose.model('Vote', schema);
