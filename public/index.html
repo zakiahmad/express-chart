@@ -30,13 +30,13 @@ socket.on('vote', function (response) {
 
    var i = 0;
 
-      for (var key in response) {
+  	for (var key in response) {
       data.labels[i] = response[i]._id;
       data.datasets[0].data[i] = response[i].total_vote;
       i++;
    }
    
-      // Update chart
+  	// Update chart
    myChart.update(); 
 });
 
