@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var app      = express();
 var server   = require('http').Server(app);
-const io       = require('socket.io')("http://localhost:3000");
+const socket = require("socket.io-client")("http://localhost:3000");
 
 socket.on("connect_error", (err) => {
 	console.log('connect_error due to ${err.message}');
@@ -13,7 +13,7 @@ socket.on("connect_error", (err) => {
 // Config
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req,res,next){
-	req.io = io;
+	req.socket = io;
 	next();
 });
 
