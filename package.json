@@ -5,6 +5,7 @@
         "body-parser": "latest",
         "express": "latest",
         "mongoose": "latest",
+        "nodemon": "^2.0.19",
         "socket.io": "latest"
     }
 }
