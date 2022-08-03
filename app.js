@@ -5,8 +5,9 @@ var bodyParser = require('body-parser');
 var app      = express();
 var server   = require('http').Server(app);
 var io       = require('socket.io')("http://localhost:3000");
-    csocket.on("connect_error", (err) => {
-		console.log('connect_error due to ${err.message}');
+
+socket.on("connect_error", (err) => {
+	console.log('connect_error due to ${err.message}');
 });
 
 // Config
