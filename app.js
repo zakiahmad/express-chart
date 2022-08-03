@@ -13,7 +13,7 @@ socket.on("connect_error", (err) => {
 // Config
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req,res,next){
-	req.socket = io;
+	req.socket = socket;
 	next();
 });
 
@@ -60,7 +60,7 @@ app.post('/vote', function(req, res) {
 		function(err, results) {
 			if (err) throw err;
 			console.log(results);
-			req.io.sockets.emit('vote', results);
+			req.socket.sockets.emit('vote', results);
 		}
 		);
 
