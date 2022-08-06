@@ -4,16 +4,23 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var app      = express();
 var server   = require('http').Server(app);
-const socket = require("socket.io-client")("http://localhost:3000");
-
-socket.on("connect_error", (err) => {
-	console.log('connect_error due to ${err.message}');
+//var io       = require('socket.io')(server);
+const io = require('socket.io')(server, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        transports: ['websocket', 'polling'],
+        credentials: true
+    },
+    allowEIO3: true
 });
+
+
 
 // Config
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function(req,res,next){
-	req.socket = socket;
+	req.io = io;
 	next();
 });
 
@@ -21,12 +28,7 @@ app.use(function(req,res,next){
 app.use(express.static(__dirname + '/public'));
 
 // Connect to DB
-var urldb = "mongodb://127.0.0.1:27017/realtime_chart";
-mongoose.connect(urldb, function(err, db){
-	if(err) throw err;
-	console.log("dataabase konek");
-	db.close();
-});
+mongoose.connect("mongodb://127.0.0.1:27017/realtime_chart");
 
 var schema = mongoose.Schema({name: String});
 var Vote = mongoose.model('Vote', schema);
@@ -60,7 +62,7 @@ app.post('/vote', function(req, res) {
 		function(err, results) {
 			if (err) throw err;
 			console.log(results);
-			req.socket.sockets.emit('vote', results);
+			req.io.sockets.emit('vote', results);
 		}
 		);
 
@@ -77,8 +79,10 @@ app.get('/data', function(req, res) {
 Socket.io Setting
 */
 
-io.on('connection', function (socket) {
 
+
+io.on('connection', function (socket) {
+	console.log('A client connected!');
 	Vote.aggregate(
 
 		[{ "$group": {
@@ -93,7 +97,6 @@ io.on('connection', function (socket) {
 		}
 	);
 });
-
 
 // Start
 server.listen(3000);
